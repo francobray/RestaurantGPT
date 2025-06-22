@@ -14,7 +14,7 @@ export interface Message {
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([
     { text: 'Hola 👋, soy el Asistente de Restaurantes. Estoy aquí para ayudarte a analizar la presencia online de cualquier restaurante.', sender: 'agent', id: Date.now(), type: 'text', timestamp: new Date() },
-    { text: 'Por favor, dime el nombre del restaurante y la zona donde se encuentra (ej: "Temple Craft, Wynwood, Miami").', sender: 'agent', id: Date.now() + 1, type: 'text', timestamp: new Date() }
+    { text: 'Por favor, dime el nombre del restaurante y la zona donde se encuentra. Por Ejemplo: CRAFT, Coral Gables, Miami', sender: 'agent', id: Date.now() + 1, type: 'text', timestamp: new Date() }
   ])
   const [isTyping, setIsTyping] = useState(false)
   const [pendingPlaceId, setPendingPlaceId] = useState<string | null>(null)
@@ -48,19 +48,13 @@ export default function Home() {
           const data = await response.json()
           if (!response.ok) throw new Error(data.error || 'Error en el servidor')
 
-          const linkMessage: Message = {
-            id: Date.now() + 1,
-            text: data.response,
-            sender: 'agent',
-            type: 'text',
-            timestamp: new Date()
-          }
+          const linkMessage: Message = { text: data.response, sender: 'agent', id: Date.now() + 1, type: 'text', timestamp: new Date() }
           setMessages(prev => [...prev, linkMessage])
         } else {
           const cancelMessage: Message = {
-            id: Date.now() + 1,
             text: 'De acuerdo. Si cambias de opinión, aquí estoy para ayudar.',
             sender: 'agent',
+            id: Date.now() + 1,
             type: 'text',
             timestamp: new Date()
           }

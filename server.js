@@ -37,15 +37,15 @@ app.post('/api/chat', async (req, res) => {
 
     if (getRecommendations) {
       const allRecommendations = [
-        "📝 Missing meta descriptions on 8 pages",
-        "🔗 Broken links detected (4)",
-        "📉 Low keyword density for primary terms",
-        "🛑 Stop pushing customers to 3rd party websites",
-        "🐢 Slow page loading speed (5.2s)",
-        "📱 Unoptimized website for mobile devices",
-        "🗺️ Inconsistent NAP information across directories",
-        "🖼️ Missing alt tags on 12 images",
-        "⚙️ No schema markup implemented"
+        "📝 Faltan metadescripciones en 8 páginas",
+        "🔗 Se detectaron 4 enlaces rotos",
+        "📉 Baja densidad de palabras clave para términos primarios",
+        "🛑 Dejar de enviar clientes a sitios web de terceros",
+        "🐢 Velocidad de carga de página lenta (5.2s)",
+        "📱 Sitio web no optimizado para dispositivos móviles",
+        "🗺️ Información de NAP inconsistente en los directorios",
+        "🖼️ Faltan etiquetas alt en 12 imágenes",
+        "⚙️ No se ha implementado el marcado de esquema"
       ];
 
       const shuffled = allRecommendations.sort(() => 0.5 - Math.random());
@@ -63,12 +63,12 @@ app.post('/api/chat', async (req, res) => {
 
     // --- Branch for Analysis ---
     if (analysisPlaceId) {
-      const analysisResponse = await getAnalysis(analysisPlaceId);
+      const analysisResponses = await getAnalysis(analysisPlaceId);
       
       const followupQuestion = '¿Quieres recomendaciones de mejora?';
       
       return res.status(200).json({ 
-        responses: [analysisResponse, followupQuestion],
+        responses: [...analysisResponses, followupQuestion],
         nextAction: 'get_recommendations' 
       });
     }
@@ -166,16 +166,19 @@ async function getAnalysis(placeId) {
   // Simulate Grader API response
   const rayScore = Math.floor(Math.random() * 40) + 60; // Random score between 60-99
   const websiteScore = Math.floor(Math.random() * 30) + 40; // Random score between 40-69
+  const monthlyBilling = Math.floor(Math.random() * 8001) + 2000;
   
-  const analysisText = `Análisis de Temple Craft:
+  const analysisText1 = `Análisis de Temple Craft:
 
 🎯 RAY Score: ${rayScore}%
-🔍 Que busca el cliente: "bar cerca mío"
-📊 Ranking Google Maps para "bar cercamío": 9
-🥊 Competidor mas fuerte: The Dirty Rabbit Wynwood
+🔍 Que busca el cliente: "bar cerca"
+📊 Ranking Google Maps para "bar cerca": 9
+🥊 Competidor con mejor ranking: The Dirty Rabbit Wynwood
 🌐 Score website: ${websiteScore}%`;
 
-  return analysisText;
+  const analysisText2 = `💰 Facturación adicional mensual posible: $${monthlyBilling}`;
+
+  return [analysisText1, analysisText2];
 }
 
 app.listen(PORT, () => {
